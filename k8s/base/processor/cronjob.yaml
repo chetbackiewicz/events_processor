@@ -17,6 +17,8 @@ spec:
             app: processor
         spec:
           restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: dockerhub-creds
           containers:
             - name: processor
               image: processor:latest

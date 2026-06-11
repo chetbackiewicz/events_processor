@@ -56,8 +56,8 @@ patches:
 
 images:
   - name: ingestion-api
-    newName: ghcr.io/chetbackiewicz/demo/ingestion-api
+    newName: docker.io/chetback/ingestion-api
     newTag: prod
   - name: processor
-    newName: ghcr.io/chetbackiewicz/demo/processor
+    newName: docker.io/chetback/processor
     newTag: prod
