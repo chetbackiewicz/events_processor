@@ -1,0 +1,63 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      kind: Deployment
+      name: ingestion-api
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: ingestion-api
+      spec:
+        replicas: 3
+        template:
+          spec:
+            containers:
+              - name: ingestion-api
+                resources:
+                  requests:
+                    cpu: 200m
+                    memory: 128Mi
+                  limits:
+                    cpu: 500m
+                    memory: 256Mi
+
+  - target:
+      kind: CronJob
+      name: processor
+    patch: |
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: processor
+      spec:
+        schedule: "*/2 * * * *"
+        jobTemplate:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: processor
+                    env:
+                      - name: BATCH_SIZE
+                        value: "200"
+                    resources:
+                      requests:
+                        cpu: 100m
+                        memory: 128Mi
+                      limits:
+                        cpu: 500m
+                        memory: 256Mi
+
+images:
+  - name: ingestion-api
+    newName: ghcr.io/chetbackiewicz/demo/ingestion-api
+    newTag: prod
+  - name: processor
+    newName: ghcr.io/chetbackiewicz/demo/processor
+    newTag: prod
