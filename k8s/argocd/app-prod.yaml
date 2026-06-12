@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/chetbackiewicz/demo.git
+    repoURL: https://github.com/chetbackiewicz/events_processor.git
     targetRevision: main
     path: k8s/overlays/prod
   destination:
