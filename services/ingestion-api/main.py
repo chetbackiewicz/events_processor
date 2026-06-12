@@ -23,7 +23,11 @@ def get_redis():
 
 @app.route("/health", methods=["GET"])
 def health():
-    return jsonify({"status": "ok"})
+    try:
+        get_redis().ping()
+        return jsonify({"status": "ok"})
+    except Exception:
+        return jsonify({"status": "degraded", "reason": "redis unreachable"}), 503
 
 
 @app.route("/events", methods=["POST"])
