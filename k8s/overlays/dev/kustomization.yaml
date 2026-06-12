@@ -2,55 +2,55 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base
+- ../../base
+
 
 patches:
-  - target:
-      kind: Deployment
+- patch: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
       name: ingestion-api
-    patch: |
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: ingestion-api
-      spec:
-        replicas: 1
-        template:
-          spec:
-            containers:
-              - name: ingestion-api
-                resources:
-                  requests:
-                    cpu: 50m
-                    memory: 64Mi
-                  limits:
-                    cpu: 200m
-                    memory: 128Mi
-
-  - target:
-      kind: CronJob
+    spec:
+      replicas: 1
+      template:
+        spec:
+          containers:
+            - name: ingestion-api
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  cpu: 200m
+                  memory: 128Mi
+  target:
+    kind: Deployment
+    name: ingestion-api
+- patch: |
+    apiVersion: batch/v1
+    kind: CronJob
+    metadata:
       name: processor
-    patch: |
-      apiVersion: batch/v1
-      kind: CronJob
-      metadata:
-        name: processor
-      spec:
-        schedule: "*/5 * * * *"
-        jobTemplate:
-          spec:
-            template:
-              spec:
-                containers:
-                  - name: processor
-                    env:
-                      - name: BATCH_SIZE
-                        value: "25"
+    spec:
+      schedule: "*/5 * * * *"
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: processor
+                  env:
+                    - name: BATCH_SIZE
+                      value: "25"
+  target:
+    kind: CronJob
+    name: processor
 
 images:
-  - name: ingestion-api
-    newName: docker.io/chetback/ingestion-api
-    newTag: dev
-  - name: processor
-    newName: docker.io/chetback/processor
-    newTag: dev
+- name: ingestion-api
+  newName: chetback/ingestion-api
+  newTag: 9129d61e9339809a6927ad5ad0c3d457e0f597a5
+- name: processor
+  newName: chetback/processor
+  newTag: 9129d61e9339809a6927ad5ad0c3d457e0f597a5
