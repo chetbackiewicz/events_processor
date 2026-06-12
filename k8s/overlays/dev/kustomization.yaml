@@ -50,7 +50,7 @@ patches:
 images:
 - name: ingestion-api
   newName: chetback/ingestion-api
-  newTag: 9129d61e9339809a6927ad5ad0c3d457e0f597a5
+  newTag: 8b8eff9bd27f466093b145b747934821582d4781
 - name: processor
   newName: chetback/processor
-  newTag: 9129d61e9339809a6927ad5ad0c3d457e0f597a5
+  newTag: 8b8eff9bd27f466093b145b747934821582d4781
